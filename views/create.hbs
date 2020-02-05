@@ -1,0 +1,58 @@
+<form enctype="multipart/form-data" action='/create' method='POST' name='form'>
+  <div class='row'>
+    <div class='input-field col s6'>
+      <input
+        id='status'
+        type='text'
+        class='validate'
+        name='status'
+        required
+      >
+      <label for='status'>Status</label>
+    </div>
+    <div class='input-field col s6'>
+      <textarea 
+        id='description'
+        name='description'
+        class='materialize-textarea validate'
+        required
+      ></textarea>
+      <label for='description'>Description</label>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='file-field input-field col s6'>
+      <div class='btn'>
+        <span>File</span>
+        <input
+          type='file'
+          accept='image/*'
+          name='fileBuffer'
+          required
+        >
+      </div>
+      <div class='file-path-wrapper'>
+        <input 
+          class='file-path validate'
+          name='fileContent'
+          type='text'
+          placeholder='Upload file'
+          required
+        >
+      </div>
+    </div>
+    <div class='input-field col s6'>
+      <input
+        id='deadline'
+        name='deadline'
+        type='text'
+        class='validate'
+        required
+      >
+      <label for='deadline'>Deadline</label>
+    </div>
+  </div>
+  <div class='row center'>
+    <button class='waves-effect waves-light btn-large' type='submit'>Create Task</button>
+  </div>
+</form>

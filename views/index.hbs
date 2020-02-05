@@ -1,0 +1,32 @@
+{{#if tasks.length}}
+<table class='highlight centered responsive-table'>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Deadline</th>
+      <th>FileName</th>
+      <th>Image</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each tasks}}
+  <tr id={{_id}}>
+    <td>{{@index}}</td>
+    <td>{{description}}</td>
+    <td>{{status}}</td>
+    <td>{{deadline}}</td>
+    <td class='clickable'>{{fileContent}}</td>
+    <td><img src='{{img}}' /></td>
+    <td class='clickable delete'><i class="small material-icons">delete</i></td>
+    <td class='clickable update'><i class="small material-icons">edit</i>
+  </tr>
+  {{/each}}
+  </tbody>
+</table>
+{{else}}
+<h1>No tasks found!</h1>
+{{/if}}
