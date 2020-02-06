@@ -1,10 +1,16 @@
 const express = require('express');
+const app = express();
+const httpApp = require('http').createServer(app);
+const io = require('socket.io')(httpApp);
 const mongoose = require('mongoose');
 const exphbs = require('express-handlebars');
-const app = express();
+const cookieParser = require('cookie-parser');
+
 const path = require('path');
 const PORT = process.env.PORT || 8000;
 const tasksRoutes = require('./routes/tasks');
+
+
 
 const hbs = exphbs.create({
   defaultLayout: 'main',
@@ -17,6 +23,8 @@ app.set('views', 'views');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
 app.use(tasksRoutes);
 
 const start = async () => {
@@ -26,13 +34,25 @@ const start = async () => {
       useFindAndModify: false,
       useUnifiedTopology: true
     });
-    app.listen(PORT);
+    httpApp.listen(PORT);
   }
   catch (err) {
     console.log(err);
   }
 };
 
-
 start();
+let users = 0;
+io.on('connection', socket => {
+  console.log('User connected');
+  users++;
+  // io.sockets.emit('change title', { title: Math.random().toString(36).substring(7) });
+  io.sockets.emit('new user', { users });
+  socket.on('disconnect', () => {
+    users--;
+    io.sockets.emit('user disconnected', { users });
+    console.log('User disconnected');
+  });
+});
+
 console.log(`App running on http://localhost:${PORT}`);

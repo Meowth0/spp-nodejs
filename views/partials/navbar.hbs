@@ -1,6 +1,6 @@
   <nav>
     <div class="nav-wrapper">
-      <a href="/" class="brand-logo">Home</a>
+      <a href="/" class="brand-logo" id='navTitle'>Home</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         {{#if isIndex}}
           <li class='active'><a href="/">Tasks</a></li>
@@ -12,6 +12,7 @@
         {{else}}
           <li><a href="/create">Create</a></li>
         {{/if}}
+        <span id='users' class="new badge" data-badge-caption='users now'>0</span>
       </ul>
     </div>
   </nav>
