@@ -1,18 +1,28 @@
   <nav>
     <div class="nav-wrapper">
-      <a href="/" class="brand-logo" id='navTitle'>Home</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        {{#if isIndex}}
-          <li class='active'><a href="/">Tasks</a></li>
-        {{else}}
-          <li><a href="/">Tasks</a></li>
-        {{/if}}
-        {{#if isCreate}}
-          <li class='active'><a href="/create">Create</a></li>
-        {{else}}
-          <li><a href="/create">Create</a></li>
-        {{/if}}
-        <span id='users' class="new badge" data-badge-caption='users now'>0</span>
-      </ul>
+      {{#if signIn}}
+        <a href="/" class="brand-logo" id='navTitle'>Home</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          {{#if isIndex}}
+            <li class='active'><a href="/">Tasks</a></li>
+          {{else}}
+            <li><a href="/">Tasks</a></li>
+          {{/if}}
+          {{#if isCreate}}
+            <li class='active'><a href="/create">Create</a></li>
+          {{else}}
+            <li><a href="/create">Create</a></li>
+          {{/if}}
+          <span id='users' class="new badge" data-badge-caption='users now'>0</span>
+        </ul>
+      {{else}}
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          {{#if signUp}}
+            <li><a href="/login">Sign in</a></li>
+          {{else}}
+            <li><a href="/register">Sign up</a></li>
+          {{/if}}
+        </ul>
+      {{/if}}
     </div>
   </nav>

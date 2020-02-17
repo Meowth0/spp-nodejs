@@ -13,10 +13,6 @@ const schema = new Schema({
     type: String,
     default: ''
   },
-  buffer: {
-    type: Object,
-    default: {}
-  },
   deadline: {
     type: String,
     required: true
@@ -24,6 +20,9 @@ const schema = new Schema({
   img: {
     type: String,
     required: true
+  },
+  file: {
+    type: Object
   }
 });
 

@@ -2,11 +2,10 @@ require('dotenv').config();
 const { Router } = require('express');
 const router = Router();
 const Task = require('../models/Task');
+const User = require('../models/User');
 const multer  = require('multer');
 const jwt = require('jsonwebtoken')
 const upload = multer();
-const fetch = require("node-fetch");
-const { URL } = require('../constants/constants');
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.jwtToken;
@@ -23,25 +22,29 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-router.post('/login', (req, res) => {
-  const { username } = req.body;
-  if (process.env.loginName !== username) {
-    return res.sendStatus(401);
+router.post('/login', async (req, res) => {
+  const { login, password } = req.body;
+  const user = await User.findOne({ login, password }).lean();
+  if (!user) {
+    return res.redirect('/login');
   }
-  const user = { name: username };
-  
-
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
   res.cookie('jwtToken', accessToken);  
-  return res.redirect('/');
+  res.redirect('/');
+});
+
+router.post('/register', async (req, res) => {
+  const { login, password } = req.body;
+  await new User({ login, password }).save();
+  res.redirect('/login');
+});
+
+router.get('/register', (req, res) => {
+  res.render('register', { signUp: true });
 });
 
 router.get('/login', (req, res) => {
-  const accessToken = jwt.sign({ name: 'test' }, process.env.ACCESS_TOKEN_SECRET);
-  if (req.cookies.jwtToken === accessToken) {
-    return res.redirect('/');
-  }
-  res.render('login');
+  res.render('login', { signUp: false });
 });
 
 router.get('/', authenticateToken, async (req, res) => {
@@ -49,14 +52,16 @@ router.get('/', authenticateToken, async (req, res) => {
   res.render('index', {
     title: 'Tasks',
     isIndex: true,
-    tasks
+    tasks,
+    signIn: true
   });
 });
 
 router.get('/create', authenticateToken, (req, res) => {
   res.render('create', {
     title: 'Create task',
-    isCreate: true
+    isCreate: true,
+    signIn: true
   });
 });
 
@@ -65,32 +70,20 @@ router.get('/update/:id', authenticateToken, async (req, res) => {
   res.render('update', {
     title: 'Update task',
     isUpdate: true,
+    signIn: true,
     status,
     fileContent,
     description,
     deadline,
-    file,
-    _id
+    _id, 
+    file
   });
 });
 
 router.post('/update/:id', authenticateToken, upload.single('fileBuffer'), async (req, res) => {
-  if (req.body._method === 'PUT') {
-    const file = req.file;
-    await fetch(`${URL}/update/${req.params.id}`, {
-      method: 'PUT',
-      body: {
-        ...req.body,
-        file
-      }
-    });
-  }
+  const img = `data:image/png;base64,${Buffer.from(req.file.buffer.buffer).toString('base64')}`;
+  await Task.findByIdAndUpdate(req.params.id, { ...req.body, img, file: req.file });
   res.redirect('/');
-});
-
-router.put('/update/:id', authenticateToken, async (req, res) => {
-  await Task.findByIdAndUpdate(req.params.id, req.body);
-  res.end();
 });
 
 router.delete('/delete/:id', authenticateToken, async (req, res) => {
@@ -100,15 +93,15 @@ router.delete('/delete/:id', authenticateToken, async (req, res) => {
 
 router.post('/create', authenticateToken, upload.single('fileBuffer'), async (req, res) => {
   const { description, status, deadline, fileContent } = req.body;
-  const file = req.file;
+  const { file } = req;
   const img = `data:image/png;base64,${Buffer.from(req.file.buffer.buffer).toString('base64')}`;
   await new Task({
     description,
     status,
     deadline,
     fileContent,
-    file,
-    img
+    img,
+    file
   }).save();
   res.redirect('/');
 });
