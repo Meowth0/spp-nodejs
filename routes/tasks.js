@@ -6,6 +6,7 @@ const User = require('../models/User');
 const multer  = require('multer');
 const jwt = require('jsonwebtoken')
 const upload = multer();
+const moment = require('moment');
 
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.jwtToken;
@@ -29,7 +30,8 @@ router.post('/login', async (req, res) => {
     return res.redirect('/login');
   }
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  res.cookie('jwtToken', accessToken);  
+  res.cookie('jwtToken', accessToken);
+  socket.io.emit('connect');
   res.redirect('/');
 });
 
@@ -49,10 +51,11 @@ router.get('/login', (req, res) => {
 
 router.get('/', authenticateToken, async (req, res) => {
   const tasks = await Task.find({}).lean();
+  const formattedTasks = tasks.map(task => ({...task, deadline: moment(task.deadline).format('DD MMMM YYYY') }));
   res.render('index', {
     title: 'Tasks',
     isIndex: true,
-    tasks,
+    tasks: formattedTasks,
     signIn: true
   });
 });
@@ -74,7 +77,7 @@ router.get('/update/:id', authenticateToken, async (req, res) => {
     status,
     fileContent,
     description,
-    deadline,
+    deadline: moment(deadline).format('DD MMMM YYYY'),
     _id, 
     file
   });

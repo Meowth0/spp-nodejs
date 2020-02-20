@@ -46,7 +46,6 @@ let users = 0;
 io.on('connection', socket => {
   console.log('User connected');
   users++;
-  // io.sockets.emit('change title', { title: Math.random().toString(36).substring(7) });
   io.sockets.emit('new user', { users });
   socket.on('disconnect', () => {
     users--;

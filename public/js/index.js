@@ -19,10 +19,12 @@ for (let i = 0; i < updateButtons.length; i++) {
   });
 }
 
-const socket = io.connect('http://localhost:8000');
-socket.on('change title', data => {
-  document.getElementById('navTitle').innerText = data.title;
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.datepicker');
+  var instances = M.Datepicker.init(elems, { format: 'dd mmmm yyyy' });
 });
+
+const socket = io.connect('http://localhost:8000');
 
 setUserCount = count => {
   document.getElementById('users').innerText = count;

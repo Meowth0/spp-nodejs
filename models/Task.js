@@ -14,7 +14,7 @@ const schema = new Schema({
     default: ''
   },
   deadline: {
-    type: String,
+    type: Date,
     required: true
   },
   img: {
