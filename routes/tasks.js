@@ -31,7 +31,6 @@ router.post('/login', async (req, res) => {
   }
   const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
   res.cookie('jwtToken', accessToken);
-  socket.io.emit('connect');
   res.redirect('/');
 });
 
