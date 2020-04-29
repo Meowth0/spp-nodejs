@@ -1,17 +1,15 @@
-<form method="POST" action="/login">
-  <div class='row center'>
-    <div id='auth-container' class='input-field col s6'>
-      <input type='text' autocomplete="off" class='validate' name='login' required>
-      <label for='login'>Name</label>
-    </div>
+<div class='row center'>
+  <div id='auth-container' class='input-field col s6'>
+    <input type='text' autocomplete="off" id='login' class='validate' required>
+    <label for='login'>Name</label>
   </div>
-  <div class='row center'>
-    <div id='auth-container' class='input-field col s6'>
-      <input type='password' autocomplete="off" class='validate' name='password' required>
-      <label for='password'>Password</label>
-    </div>
+</div>
+<div class='row center'>
+  <div id='auth-container' class='input-field col s6'>
+    <input type='password' autocomplete="off" id='password' class='validate' required>
+    <label for='password'>Password</label>
   </div>
-  <div class='row center'>
-    <button class='waves-effect waves-light btn-large' type="submit">Sign in</button>
-  </div>
-</form>
+</div>
+<div class='row center'>
+  <button class='waves-effect waves-light btn-large' id='login-form'>Sign in</button>
+</div>

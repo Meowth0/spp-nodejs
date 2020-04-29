@@ -4,7 +4,7 @@ const router = Router();
 const Task = require('../models/Task');
 const User = require('../models/User');
 const multer  = require('multer');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const upload = multer();
 const moment = require('moment');
 
@@ -22,23 +22,6 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
-
-router.post('/login', async (req, res) => {
-  const { login, password } = req.body;
-  const user = await User.findOne({ login, password }).lean();
-  if (!user) {
-    return res.redirect('/login');
-  }
-  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-  res.cookie('jwtToken', accessToken);
-  res.redirect('/');
-});
-
-router.post('/register', async (req, res) => {
-  const { login, password } = req.body;
-  await new User({ login, password }).save();
-  res.redirect('/login');
-});
 
 router.get('/register', (req, res) => {
   res.render('register', { signUp: true });
@@ -88,15 +71,10 @@ router.post('/update/:id', authenticateToken, upload.single('fileBuffer'), async
   res.redirect('/');
 });
 
-router.delete('/delete/:id', authenticateToken, async (req, res) => {
-  await Task.deleteOne({ _id: req.params.id });
-  res.end();
-});
-
 router.post('/create', authenticateToken, upload.single('fileBuffer'), async (req, res) => {
   const { description, status, deadline, fileContent } = req.body;
   const { file } = req;
-  const img = `data:image/png;base64,${Buffer.from(req.file.buffer.buffer).toString('base64')}`;
+  const img = `data:image/png;base64,${Buffer.from(req.file.buffer.buffer).toString('base64')}`;  
   await new Task({
     description,
     status,

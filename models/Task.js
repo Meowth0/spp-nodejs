@@ -22,7 +22,8 @@ const schema = new Schema({
     required: true
   },
   file: {
-    type: Object
+    type: Object,
+    default: {}
   }
 });
 

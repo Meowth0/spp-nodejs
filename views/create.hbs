@@ -6,7 +6,6 @@
         type='text'
         class='validate'
         name='status'
-        required
       >
       <label for='status'>Status</label>
     </div>
@@ -15,7 +14,6 @@
         id='description'
         name='description'
         class='materialize-textarea validate'
-        required
       ></textarea>
       <label for='description'>Description</label>
     </div>
@@ -25,6 +23,7 @@
       <div class='btn'>
         <span>File</span>
         <input
+          id='file'
           type='file'
           accept='image/*'
           name='fileBuffer'
@@ -32,16 +31,17 @@
       </div>
       <div class='file-path-wrapper'>
         <input 
+          id='fileContent'
           class='file-path validate'
           name='fileContent'
           type='text'
           placeholder='Upload file'
-          required
         >
       </div>
     </div>
     <div class='input-field col s6'>
-      <input name='deadline' type="text" class="datepicker validate" required>
+      <input id='deadline' name='deadline' type="text" class="datepicker validate" 
+      >
       <label for='deadline'>Deadline</label>
     </div>
   </div>
